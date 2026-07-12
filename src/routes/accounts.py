@@ -208,8 +208,10 @@ async def reset_password_complete(
 
     try:
         user.set_password(reset_data.password)
+        await db.flush()
         await db.delete(token_record)
         await db.commit()
+        await db.refresh(user)
     except SQLAlchemyError:
         await db.rollback()
         raise HTTPException(
@@ -272,7 +274,7 @@ async def login_user(
 
 
 @router.post(
-    "/api/v1/accounts/refresh/",
+    "/refresh/",
     response_model=TokenRefreshResponseSchema,
 )
 async def refresh_access_token(
