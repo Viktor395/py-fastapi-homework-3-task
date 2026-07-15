@@ -23,7 +23,7 @@ from sqlalchemy.orm import (
 
 from database import Base
 from database.validators import accounts as validators
-from security.passwords import hash_password, verify_password
+from security.passwords import hash_password
 from security.utils import generate_secure_token
 
 
@@ -101,7 +101,6 @@ class UserModel(Base):
         return self.group.name == group_name
 
     def set_password(self, password: str):
-        
         self._hashed_password = pwd_context.hash(password)
 
     @classmethod
